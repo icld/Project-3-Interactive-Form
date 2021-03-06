@@ -130,42 +130,72 @@ const cvvValidator = () => {
 }
 
 
+
 const form = document.querySelector('form')
 // listens on form submit for all field validations.
 form.addEventListener('submit', e => {
-    if (!nameValidator()) {
+
+    function isInvalid(element) {
+        const parEl = element.parentElement
         e.preventDefault();
-        console.log('invalid name')
+        parEl.classList.add('not-valid')
+        parEl.classList.remove('valid')
+        parEl.lastElementChild.style.display = 'block'
     }
+    function isValid(element) {
+        const parEl = element.parentElement
+        parEl.classList.add('valid')
+        parEl.classList.remove('not-valid')
+        parEl.lastElementChild.style.display = 'none'
+    }
+    if (!nameValidator()) {
+        isInvalid(nameField)
+    } else {
+        isValid(nameField)
+    }
+
     if (!emailValidator()) {
-        e.preventDefault();
-        console.log('invalid email')
+        isInvalid(email)
+    } else {
+        isValid(email)
     }
     if (!registerValidator()) {
-        e.preventDefault();
-        console.log('invalid register')
-    }
-    if (!cardNumberValidator()) {
-        e.preventDefault();
-        console.log('invalid cardNumber')
+        isInvalid(registerFieldset)
+        document.querySelector('#activities-hint').style.display = 'block'
+    } else {
+        isValid(registerFieldset)
+        document.querySelector('#activities-hint').style.display = 'none'
     }
 
     if (paymentSelect.value === 'credit-card') {
         console.log('cc selected')
         if (!cardNumberValidator()) {
-            e.preventDefault();
-            console.log('invalid zip')
+            isInvalid(cardNumber)
+        } else {
+            isValid(cardNumber)
         }
         if (!zipValidator()) {
-            e.preventDefault();
-            console.log('invalid zip')
+            isInvalid(zip)
+        } else {
+            isValid(zip)
         }
         if (!cvvValidator()) {
-            e.preventDefault();
-            console.log('invalid cvv')
+            isInvalid(cvv)
+        } else {
+            isValid(cvv)
         }
     }
-
-    // nameValidator()
-
 })
+// adds and removes .focus class for checkbox parents for increased accessibility
+checkBoxes.forEach(e => {
+    e.addEventListener('focus', e => {
+        e.target.parentElement.classList.add('focus')
+    })
+    e.addEventListener('blur', e => {
+        const active = document.querySelector('.focus')
+        if (active) {
+            active.classList.remove('focus')
+        }
+    })
+
+});
