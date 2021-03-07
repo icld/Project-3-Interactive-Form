@@ -1,5 +1,4 @@
 
-
 const nameField = document.querySelector('#name');
 const email = document.querySelector('#email');
 const jobRoleSelect = document.querySelector('#title');
@@ -97,16 +96,15 @@ paymentSelect.addEventListener('change', e => {
     }
 })
 
+// Validation funcions: check appropriate fields against regex for accepted user input.  
 const nameValidator = () => {
     const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameField.value)
     return nameIsValid
 }
-
 const emailValidator = () => {
     const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(email.value);
     return emailIsValid
 }
-
 const registerValidator = () => {
     const registerIsValid = newTotal > 0
     return registerIsValid
@@ -131,39 +129,48 @@ const cvvValidator = () => {
 
 
 
+function isInvalid(element) {
+    const parEl = element.parentElement
+    // e.preventDefault();
+    parEl.classList.add('not-valid')
+    parEl.classList.remove('valid')
+    parEl.lastElementChild.style.display = 'block'
+}
+function isValid(element) {
+    const parEl = element.parentElement
+    parEl.classList.add('valid')
+    parEl.classList.remove('not-valid')
+    parEl.lastElementChild.style.display = 'none'
+}
 const form = document.querySelector('form')
 // listens on form submit for all field validations.
 form.addEventListener('submit', e => {
 
-    function isInvalid(element) {
-        const parEl = element.parentElement
-        e.preventDefault();
-        parEl.classList.add('not-valid')
-        parEl.classList.remove('valid')
-        parEl.lastElementChild.style.display = 'block'
-    }
-    function isValid(element) {
-        const parEl = element.parentElement
-        parEl.classList.add('valid')
-        parEl.classList.remove('not-valid')
-        parEl.lastElementChild.style.display = 'none'
-    }
+
     if (!nameValidator()) {
         isInvalid(nameField)
+        e.preventDefault();
     } else {
         isValid(nameField)
     }
 
     if (!emailValidator()) {
         isInvalid(email)
+        e.preventDefault();
     } else {
         isValid(email)
     }
     if (!registerValidator()) {
-        isInvalid(registerFieldset)
+        const parEl = element.parentElement
+        // e.preventDefault();
+        parEl.classList.add('not-valid')
+        parEl.classList.remove('valid')
+        e.preventDefault();
         document.querySelector('#activities-hint').style.display = 'block'
     } else {
-        isValid(registerFieldset)
+        const parEl = element.parentElement
+        parEl.classList.add('valid')
+        parEl.classList.remove('not-valid')
         document.querySelector('#activities-hint').style.display = 'none'
     }
 
@@ -171,16 +178,19 @@ form.addEventListener('submit', e => {
         console.log('cc selected')
         if (!cardNumberValidator()) {
             isInvalid(cardNumber)
+            e.preventDefault();
         } else {
             isValid(cardNumber)
         }
         if (!zipValidator()) {
             isInvalid(zip)
+            e.preventDefault();
         } else {
             isValid(zip)
         }
         if (!cvvValidator()) {
             isInvalid(cvv)
+            e.preventDefault();
         } else {
             isValid(cvv)
         }
@@ -199,3 +209,58 @@ checkBoxes.forEach(e => {
     })
 
 });
+
+nameField.addEventListener('keyup', e => {
+    if (!nameValidator()) {
+        isInvalid(nameField)
+    } else {
+        isValid(nameField)
+    }
+})
+
+email.addEventListener('keyup', e => {
+    if (!emailValidator()) {
+        isInvalid(email)
+    } else {
+        isValid(email)
+    }
+})
+registerFieldset.addEventListener('change', e => {
+    if (!registerValidator()) {
+        const parEl = registerFieldset
+        // e.preventDefault();
+        parEl.classList.add('not-valid')
+        parEl.classList.remove('valid')
+        e.preventDefault();
+        document.querySelector('#activities-hint').style.display = 'block'
+    } else {
+        const parEl = registerFieldset
+        parEl.classList.add('valid')
+        parEl.classList.remove('not-valid')
+        document.querySelector('#activities-hint').style.display = 'none'
+    }
+})
+cardNumber.addEventListener('keyup', e => {
+    if (!cardNumberValidator()) {
+        isInvalid(cardNumber)
+        e.preventDefault();
+    } else {
+        isValid(cardNumber)
+    }
+})
+zip.addEventListener('keyup', e => {
+    if (!zipValidator()) {
+        isInvalid(zip)
+        e.preventDefault();
+    } else {
+        isValid(zip)
+    }
+})
+cvv.addEventListener('keyup', e => {
+    if (!cvvValidator()) {
+        isInvalid(cvv)
+        e.preventDefault();
+    } else {
+        isValid(cvv)
+    }
+})
