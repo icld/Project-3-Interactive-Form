@@ -167,6 +167,7 @@ form.addEventListener('submit', e => {
     } else {
         isValid(email)
     }
+
     if (!registerValidator()) {
         const parEl = e.target.parentElement
         parEl.classList.add('not-valid')
@@ -200,6 +201,7 @@ form.addEventListener('submit', e => {
             isValid(cvv)
         }
     }
+
 })
 
 // adds and removes .focus class for checkbox parents for increased accessibility
@@ -243,7 +245,6 @@ email.addEventListener('keyup', e => {
 registerFieldset.addEventListener('change', e => {
     const clicked = e.target
     const clickedType = e.target.getAttribute('data-day-and-time')
-    console.log(clicked, clickedType)
 
     // disable and style change for ineligable selections, based on time-slot conflict
     for (let i = 0; i < checkBoxes.length; i++) {
