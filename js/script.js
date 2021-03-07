@@ -8,6 +8,22 @@ const designSelect = document.querySelector('#design')
 const colorDiv = document.querySelector('#shirt-colors')
 const colorSelect = document.querySelector('#color')
 const colorOptions = colorSelect.children
+const paymentSelect = document.querySelector('#payment')
+const creditCardDiv = document.querySelector('#credit-card')
+const paypal = document.querySelector('#paypal')
+const bitcoin = document.querySelector('#bitcoin')
+const form = document.querySelector('form')
+const registerFieldset = document.querySelector('#activities')
+let total = document.querySelector('#activities-cost')
+const checkBoxes = document.querySelectorAll("input[type=checkbox]")
+let newTotal = 0
+
+
+
+paymentSelect.value = 'credit-card'
+paypal.style.display = 'none'
+bitcoin.style.display = 'none'
+
 
 // default setup.  focus with nameField. otherJobRole hidden. colorDiv hidden
 nameField.focus()
@@ -50,12 +66,6 @@ designSelect.addEventListener('change', e => {
 
 })
 
-// variables for Register for Activites fieldset to be used in event listener below . 
-const registerFieldset = document.querySelector('#activities')
-let total = document.querySelector('#activities-cost')
-const checkBoxes = document.querySelectorAll("input[type=checkbox]")
-let newTotal = 0
-
 // listens on fieldset for changes.  adds itemCost to total
 registerFieldset.addEventListener('change', e => {
     const itemCost = parseInt(e.target.getAttribute('data-cost'))
@@ -68,15 +78,6 @@ registerFieldset.addEventListener('change', e => {
     }
     total.innerHTML = `Total: $${newTotal}`
 })
-
-// variables for Payment Info Fieldset 
-const paymentSelect = document.querySelector('#payment')
-const creditCardDiv = document.querySelector('#credit-card')
-const paypal = document.querySelector('#paypal')
-const bitcoin = document.querySelector('#bitcoin')
-paymentSelect.value = 'credit-card'
-paypal.style.display = 'none'
-bitcoin.style.display = 'none'
 
 // displays payment options based on paymentSelect state
 paymentSelect.addEventListener('change', e => {
@@ -111,27 +112,29 @@ const registerValidator = () => {
 }
 
 const cardNumber = document.querySelector('#cc-num')
+cardNumber.maxLength = 16
 const zip = document.querySelector('#zip')
+zip.maxLength = 5
 const cvv = document.querySelector('#cvv')
+cvv.maxLength = 3
+
 
 const cardNumberValidator = () => {
-    const cardNumberIsValid = /\d{13,16}/.test(cardNumber.value)
+    const cardNumberIsValid = /^[0-9]{13,16}$/g.test(cardNumber.value)
     return cardNumberIsValid
 }
 const zipValidator = () => {
-    const zipIsValid = /\d{5}/.test(zip.value)
+    const zipIsValid = /^\d{5}$/.test(zip.value)
     return zipIsValid
 }
 const cvvValidator = () => {
-    const cvvIsValid = /\d{3}/.test(cvv.value)
+    const cvvIsValid = /^\d{3}$/.test(cvv.value)
     return cvvIsValid
 }
 
-
-
+// isInvalid and isValid change classes and appearance accordingly for accessibility
 function isInvalid(element) {
     const parEl = element.parentElement
-    // e.preventDefault();
     parEl.classList.add('not-valid')
     parEl.classList.remove('valid')
     parEl.lastElementChild.style.display = 'block'
@@ -142,12 +145,16 @@ function isValid(element) {
     parEl.classList.remove('not-valid')
     parEl.lastElementChild.style.display = 'none'
 }
-const form = document.querySelector('form')
+
+const nameHint = document.querySelector('#name-hint')
 // listens on form submit for all field validations.
 form.addEventListener('submit', e => {
-
-
     if (!nameValidator()) {
+        if (nameField.value.length > 0) {
+            nameHint.innerHTML = 'Name cannot contain numbers'
+        } else {
+            nameHint.innerHTML = 'Name field cannot be left blank'
+        }
         isInvalid(nameField)
         e.preventDefault();
     } else {
@@ -161,14 +168,14 @@ form.addEventListener('submit', e => {
         isValid(email)
     }
     if (!registerValidator()) {
-        const parEl = element.parentElement
+        const parEl = e.target.parentElement
         // e.preventDefault();
         parEl.classList.add('not-valid')
         parEl.classList.remove('valid')
         e.preventDefault();
         document.querySelector('#activities-hint').style.display = 'block'
     } else {
-        const parEl = element.parentElement
+        const parEl = e.target.parentElement
         parEl.classList.add('valid')
         parEl.classList.remove('not-valid')
         document.querySelector('#activities-hint').style.display = 'none'
@@ -212,6 +219,11 @@ checkBoxes.forEach(e => {
 
 nameField.addEventListener('keyup', e => {
     if (!nameValidator()) {
+        if (nameField.value.length > 0) {
+            nameHint.innerHTML = 'Name cannot contain numbers'
+        } else if (nameField.value.length === 0) {
+            nameHint.innerHTML = 'Name field cannot be left blank'
+        }
         isInvalid(nameField)
     } else {
         isValid(nameField)
