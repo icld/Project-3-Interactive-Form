@@ -1,39 +1,50 @@
+// list of variables segmented by form area
+const form = document.querySelector('form')
 
 const nameField = document.querySelector('#name');
+const nameHint = document.querySelector('#name-hint')
+
 const email = document.querySelector('#email');
+
 const jobRoleSelect = document.querySelector('#title');
 const otherJobRole = document.querySelector('#other-job-role');
-const sizeSelect = document.querySelector('#size')
-const designSelect = document.querySelector('#design')
-const colorDiv = document.querySelector('#shirt-colors')
-const colorSelect = document.querySelector('#color')
-const colorOptions = colorSelect.children
-const paymentSelect = document.querySelector('#payment')
-const creditCardDiv = document.querySelector('#credit-card')
-const paypal = document.querySelector('#paypal')
-const bitcoin = document.querySelector('#bitcoin')
-const form = document.querySelector('form')
+
 const registerFieldset = document.querySelector('#activities')
 let total = document.querySelector('#activities-cost')
 const checkBoxes = document.querySelectorAll("input[type=checkbox]")
 let newTotal = 0
 
+const sizeSelect = document.querySelector('#size')
+const designSelect = document.querySelector('#design')
+const colorDiv = document.querySelector('#shirt-colors')
+const colorSelect = document.querySelector('#color')
+const colorOptions = colorSelect.children
+
+const paymentSelect = document.querySelector('#payment')
+const creditCardDiv = document.querySelector('#credit-card')
+const cardNumber = document.querySelector('#cc-num')
+const zip = document.querySelector('#zip')
+const cvv = document.querySelector('#cvv')
+
+const paypal = document.querySelector('#paypal')
+const bitcoin = document.querySelector('#bitcoin')
 
 
-paymentSelect.value = 'credit-card'
-paypal.style.display = 'none'
-bitcoin.style.display = 'none'
-
-
-// default setup.  focus with nameField. otherJobRole hidden. colorDiv hidden
+// default setup.  
 nameField.focus()
 otherJobRole.style.display = 'none'
 colorDiv.style.display = 'none'
+paymentSelect.value = 'credit-card'
+paypal.style.display = 'none'
+bitcoin.style.display = 'none'
+cardNumber.maxLength = 16
+zip.maxLength = 5
+cvv.maxLength = 3
+
 
 
 // hides and displays otherJobRole textfield depending on jobRole selection
 jobRoleSelect.addEventListener('change', e => {
-    // const optionOther = document.querySelector('#')  
     if (e.target.value === 'other') {
         otherJobRole.style.display = ''
     } else {
@@ -97,7 +108,7 @@ paymentSelect.addEventListener('change', e => {
     }
 })
 
-// Validation funcions: check appropriate fields against regex for accepted user input.  
+// Validation functions: check appropriate fields against regex for accepted user input.  
 const nameValidator = () => {
     const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameField.value)
     return nameIsValid
@@ -110,15 +121,6 @@ const registerValidator = () => {
     const registerIsValid = newTotal > 0
     return registerIsValid
 }
-
-const cardNumber = document.querySelector('#cc-num')
-cardNumber.maxLength = 16
-const zip = document.querySelector('#zip')
-zip.maxLength = 5
-const cvv = document.querySelector('#cvv')
-cvv.maxLength = 3
-
-
 const cardNumberValidator = () => {
     const cardNumberIsValid = /^[0-9]{13,16}$/g.test(cardNumber.value)
     return cardNumberIsValid
@@ -146,7 +148,6 @@ function isValid(element) {
     parEl.lastElementChild.style.display = 'none'
 }
 
-const nameHint = document.querySelector('#name-hint')
 // listens on form submit for all field validations.
 form.addEventListener('submit', e => {
     if (!nameValidator()) {
@@ -169,7 +170,6 @@ form.addEventListener('submit', e => {
     }
     if (!registerValidator()) {
         const parEl = e.target.parentElement
-        // e.preventDefault();
         parEl.classList.add('not-valid')
         parEl.classList.remove('valid')
         e.preventDefault();
@@ -203,6 +203,7 @@ form.addEventListener('submit', e => {
         }
     }
 })
+
 // adds and removes .focus class for checkbox parents for increased accessibility
 checkBoxes.forEach(e => {
     e.addEventListener('focus', e => {
@@ -217,6 +218,7 @@ checkBoxes.forEach(e => {
 
 });
 
+// validates nameField on keyup.  Changes nameHint based on error type
 nameField.addEventListener('keyup', e => {
     if (!nameValidator()) {
         if (nameField.value.length > 0) {
@@ -230,6 +232,7 @@ nameField.addEventListener('keyup', e => {
     }
 })
 
+// validates email on keyup.
 email.addEventListener('keyup', e => {
     if (!emailValidator()) {
         isInvalid(email)
@@ -237,10 +240,29 @@ email.addEventListener('keyup', e => {
         isValid(email)
     }
 })
+
+// validates register on change.  
 registerFieldset.addEventListener('change', e => {
+    const clicked = e.target
+    const clickedType = e.target.getAttribute('data-day-and-time')
+    console.log(clicked, clickedType)
+
+    // disable and style change for ineligable selections, based on time-slot conflict
+    for (let i = 0; i < checkBoxes.length; i++) {
+        const checkBoxType = checkBoxes[i].getAttribute('data-day-and-time')
+        if (checkBoxType === clickedType && checkBoxes[i] !== clicked) {
+            if (clicked.checked) {
+                checkBoxes[i].disabled = true
+                checkBoxes[i].parentElement.style.backgroundColor = 'gray'
+            } else {
+                checkBoxes[i].disabled = false
+                checkBoxes[i].parentElement.style.backgroundColor = ''
+            }
+        }
+    }
+
     if (!registerValidator()) {
         const parEl = registerFieldset
-        // e.preventDefault();
         parEl.classList.add('not-valid')
         parEl.classList.remove('valid')
         e.preventDefault();
@@ -252,6 +274,8 @@ registerFieldset.addEventListener('change', e => {
         document.querySelector('#activities-hint').style.display = 'none'
     }
 })
+
+// validates cardNumber on keyup
 cardNumber.addEventListener('keyup', e => {
     if (!cardNumberValidator()) {
         isInvalid(cardNumber)
@@ -260,6 +284,8 @@ cardNumber.addEventListener('keyup', e => {
         isValid(cardNumber)
     }
 })
+
+// validates zip on keyup
 zip.addEventListener('keyup', e => {
     if (!zipValidator()) {
         isInvalid(zip)
@@ -268,6 +294,8 @@ zip.addEventListener('keyup', e => {
         isValid(zip)
     }
 })
+
+// validates cvv on keyup
 cvv.addEventListener('keyup', e => {
     if (!cvvValidator()) {
         isInvalid(cvv)
@@ -276,3 +304,4 @@ cvv.addEventListener('keyup', e => {
         isValid(cvv)
     }
 })
+

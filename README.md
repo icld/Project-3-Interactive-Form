@@ -3,16 +3,35 @@
 
 Project Completed by Ian Cameron Lyles
 
+    Unit 3 Project: Interactive Form - for Exceeds Expectations
 
-Description:
-    The project instructions are to "use JavaScript to enhance an interactive registration form for a fictional Full Stack conference.
+    Description: The project task is to enhance the provided registration form using only Javascript.  
+ 
+    This includes:
 
-Using the supplied HTML and CSS files, you'll add your own JavaScript to make the form more user-friendly by:
+        -setting the onLoad state of the form
+        -adding conditional behavior and interactivity 
+        -validating user input 
+        -providing error messages
+        -create realtime validation and conditional error messages
+        
+    Notes:
 
--Adding customized and conditional behavior and interactivity
+        Form fields with realtime validation and conditional error messages:
 
--Validating user input and providing helpful error messages when the user enters invalid information into the form fields."  
+            nameField - alerts user if field is empty, or if invalid characters are used
+            
+            email - realtime validation and error message    
+        
+            registerFieldset - has realtime validation.  disables ineligible/conflicting   timeslots in the rest of the field
 
-Approach:  
-    I will attempt to code this from the instructions first, without using the Walkthrough.  
+            cardNumber - realtime validation and error message.  maximum length set to 16
+
+            zip - realtime validation and error message.  maximum length set to 5
+
+            cvv - realtime validation and error message.  maximum length set to 3
+            
+
+
+
 
