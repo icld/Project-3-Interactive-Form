@@ -42,7 +42,6 @@ zip.maxLength = 5
 cvv.maxLength = 3
 
 
-
 // hides and displays otherJobRole textfield depending on jobRole selection
 jobRoleSelect.addEventListener('change', e => {
     if (e.target.value === 'other') {
@@ -182,7 +181,6 @@ form.addEventListener('submit', e => {
     }
 
     if (paymentSelect.value === 'credit-card') {
-        console.log('cc selected')
         if (!cardNumberValidator()) {
             isInvalid(cardNumber)
             e.preventDefault();
