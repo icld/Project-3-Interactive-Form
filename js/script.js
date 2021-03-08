@@ -54,6 +54,7 @@ jobRoleSelect.addEventListener('change', e => {
 // Listens on designSelect.  Based on selection, displays colorSelect with approriate shirt options
 designSelect.addEventListener('change', e => {
     colorDiv.style.display = ''
+
     if (e.target.value === 'js puns') {
         for (let i = 0; i < color.length; i++) {
             if (colorOptions[i].getAttribute('data-theme') === 'js puns') {
@@ -62,6 +63,7 @@ designSelect.addEventListener('change', e => {
                 colorOptions[i].style.display = 'none'
             }
         }
+        colorSelect.selectedIndex = 0
     } else if (e.target.value === 'heart js') {
         for (let i = 0; i < color.length; i++) {
             if (colorOptions[i].getAttribute('data-theme') === 'heart js') {
@@ -70,6 +72,7 @@ designSelect.addEventListener('change', e => {
                 colorOptions[i].style.display = 'none'
             }
         }
+        colorSelect.selectedIndex = 0
     } else {
         colorDiv.style.display = 'none'
     }
